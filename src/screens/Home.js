@@ -1,7 +1,18 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import TarefaItem from '../components/TarefaItem';
+import { getData } from '../storage/async-storage';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+
+    const [ tasks, setTasks ] = useState(null)
+
+    // Executa ao carregar a página
+    useEffect(async () => {
+        const data = await getData();
+        setTasks(data);
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.cabecalho}>
@@ -9,18 +20,18 @@ export default function Home() {
                 <View style={styles.icone}></View>
             </View>
             <ScrollView style={styles.body}>
-                <TarefaItem 
-                    nome="Tarefa 1" 
-                    status="a cumprir" 
-                    data="24/04/2004" 
-                    categoria="reunião"
-                />
-                <TarefaItem 
-                    nome="Tarefa 2" 
-                    status="concluído" 
-                    data="35/13/2088" 
-                    categoria="estudo"
-                />
+                {
+                    tasks && tasks.map((item) => {
+                        return (
+                            <TarefaItem 
+                                nome={item.nome}
+                                status={item.status}
+                                data={item.data}
+                                categoria={item.categoria}
+                            />
+                        )
+                    })
+                }
             </ScrollView>
 
             <TouchableOpacity 
