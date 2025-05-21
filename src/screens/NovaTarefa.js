@@ -1,10 +1,29 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { addData } from '../storage/async-storage';
 
 export default function NovaTarefa() {
 
     const navigation = useNavigation();
+
+    const [ nome, setNome ] = useState('')
+    const [ categotia, setCategotia ] = useState('prova')
+    const [ descricao, setDescricao ] = useState('')
+    const [ data, setData ] = useState('')
+
+    const handleSave = () => {
+        const tarefa = {
+            nome: nome,
+            categoria: categotia,
+            data: data,
+            descricao: descricao
+        };
+        addData(tarefa)
+        alert("Nova tarefa cadastrada!")
+        navigation.navigate('Home')
+    }
 
     return (
         <View>
@@ -13,10 +32,10 @@ export default function NovaTarefa() {
             </View>
             <View style={styles.body}>
                 <Text style={styles.texto}>Nome da Tarefa:</Text>
-                <TextInput style={styles.textInput} />
+                <TextInput style={styles.textInput} value={nome} onChangeText={texto => setNome(texto)} />
 
                 <Text style={styles.texto}>Categotia da Tarefa:</Text>
-                <Picker style={styles.textInput}>
+                <Picker style={styles.textInput} selectedValue={categotia} onValueChange={texto => setCategotia(texto)}>
                     <Picker.Item label="Estudo" value="estudo" />
                     <Picker.Item label="Trabalho" value="trabalho" />
                     <Picker.Item label="Reunião" value="reuniao" />
@@ -30,11 +49,13 @@ export default function NovaTarefa() {
                     placeholder='Value'
                     multiline
                     numberOfLines={3}
+                    value={descricao} onChangeText={texto => setDescricao(texto)}
                 />
 
                 <TextInput 
                     style={styles.textDate}
                     placeholder='dd/mm/yyyy'
+                    value={data} onChangeText={texto => setData(texto)}
                 />
 
                 <View style={styles.containerBotao}>
@@ -42,7 +63,9 @@ export default function NovaTarefa() {
                         <Text style={styles.botaoTexto}>Cancel</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.botao}>
+                    <TouchableOpacity style={styles.botao} onPress={() => {
+                        handleSave()
+                    }}>
                         <Text style={styles.botaoTexto}>OK</Text>
                     </TouchableOpacity>
                 </View>
