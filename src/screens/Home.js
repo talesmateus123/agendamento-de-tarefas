@@ -36,10 +36,8 @@ export default function Home() {
                         return (
                             <TarefaItem
                                 key={index}
-                                nome={item.nome}
-                                status={item.status}
-                                data={item.data}
-                                categoria={item.categoria}
+                                task={item}
+                                setIsLoaded={setIsLoaded}
                             />
                         )
                     })

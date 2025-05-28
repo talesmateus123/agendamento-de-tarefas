@@ -1,21 +1,31 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { removeData } from '../storage/async-storage';
 
 export default function TarefaItem(props) {
 
     let statusColor = 'orange';
 
-    if (props.status == 'concluído') {
+    if (props.task.status == 'concluído') {
         statusColor = 'green';
+    }
+
+    const handleDelete = async () => {
+        await removeData(props.task)
+        props.setIsLoaded(true)
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.titulo}>{props.nome}</Text>
-            <Text style={styles.data}>{props.data}</Text>
-            <Text style={styles.categoria}>Categoria - {props.categoria}</Text>
+            <Text style={styles.titulo}>{props.task.nome}</Text>
+            <Text style={styles.data}>{props.task.data}</Text>
+            <Text style={styles.categoria}>Categoria - {props.task.categoria}</Text>
             <View style={{ ...styles.status, backgroundColor: statusColor }}>
-                <Text style={styles.textoStatus}>{props.status}</Text>
+                <Text style={styles.textoStatus}>{props.task.status}</Text>
             </View>
+            <TouchableOpacity style={styles.botaoExcluir} onPress={() => handleDelete()}>
+                <MaterialCommunityIcons name="delete" size={32} color="#870d07" />
+            </TouchableOpacity>
         </View>
     )
 }
@@ -51,5 +61,10 @@ const styles = StyleSheet.create({
     },
     textoStatus: {
         color: 'white'
+    },
+    botaoExcluir: {
+        position: 'absolute',
+        right: 20,
+        bottom: 35
     }
 });
