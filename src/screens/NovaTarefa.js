@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { addData } from '../storage/async-storage';
+import { useEffect, useState } from 'react';
+import { addData, updateData } from '../storage/async-storage';
 import MaskInput from 'react-native-mask-input';
 
-export default function NovaTarefa() {
+export default function NovaTarefa(props) {
+
+    const task = props.route.params
 
     const navigation = useNavigation();
 
@@ -14,13 +16,23 @@ export default function NovaTarefa() {
     const [ descricao, setDescricao ] = useState('')
     const [ data, setData ] = useState('')
 
+    useEffect(() => {
+        if (task != undefined) {
+            setNome(task.nome)
+            setCategotia(task.categoria)
+            setDescricao(task.descricao)
+            setData(task.data)
+        }
+    }, [task])
+
     const handleSave = async () => {
         const tarefa = {
             nome: nome,
             categoria: categotia,
             data: data,
             descricao: descricao,
-            status: 'A fazer'
+            status: 'A fazer',
+            id: task?.id
         };
 
         if (nome.trim() == '') {
@@ -33,8 +45,14 @@ export default function NovaTarefa() {
             alert("Campo data não preenchido") 
         }
         else {
-            await addData(tarefa)
-            alert("Nova tarefa cadastrada!")
+            if (task != undefined) {
+                await updateData(tarefa)
+                alert("Tarefa atualizada!")
+            }
+            else {
+                await addData(tarefa)
+                alert("Nova tarefa cadastrada!")
+            }
             navigation.navigate('Home')
         }
     }
@@ -42,7 +60,7 @@ export default function NovaTarefa() {
     return (
         <View style={styles.container}>
             <View style={styles.cabecalho}>
-                <Text style={styles.titulo}>Adicionar Tarefa</Text>
+                <Text style={styles.titulo}>{task ? 'Editar' : 'Adicionar'} Tarefa</Text>
             </View>
             <ScrollView style={styles.body}>
                 <Text style={styles.texto}>Nome da Tarefa:</Text>

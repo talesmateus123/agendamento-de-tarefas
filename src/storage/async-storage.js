@@ -47,9 +47,25 @@ const removeData = async (task) => {
     await setData(tasks)
 }
 
+const updateData = async (task) => {
+    const tasks = await getData();
+    
+    for (let _task of tasks) {
+        if (_task.id == task.id) {
+            const index = tasks.indexOf(_task)
+            if (index !== -1) {
+                tasks[index] = task
+            }
+            break
+        }
+    }
+    await setData(tasks)
+}
+
 export {
     getData,
     setData,
     addData,
-    removeData
+    removeData,
+    updateData
 }
