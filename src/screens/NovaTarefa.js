@@ -11,7 +11,7 @@ export default function NovaTarefa(props) {
 
     const navigation = useNavigation();
 
-    const [ nome, setNome ] = useState('')
+    const [ nome, setNome ] = useState('''')
     const [ categotia, setCategotia ] = useState('prova')
     const [ descricao, setDescricao ] = useState('')
     const [ data, setData ] = useState('')
@@ -23,7 +23,7 @@ export default function NovaTarefa(props) {
             setDescricao(task.descricao)
             setData(task.data)
         }
-    }, [task])
+    }, [])
 
     const handleSave = async () => {
         const tarefa = {
@@ -32,25 +32,25 @@ export default function NovaTarefa(props) {
             data: data,
             descricao: descricao,
             status: 'A fazer',
-            id: task?.id
+            id: task.id
         };
 
-        if (nome.trim() == '') {
+        if (nome == '') {
             alert("Campo nome não preenchido")            
         }
-        else if (descricao.trim() == '') {
+        else if (descricao == '') {
             alert("Campo descrição não preenchido") 
         }
-        else if (data.trim() == '') {
+        else if (data == '') {
             alert("Campo data não preenchido") 
         }
         else {
             if (task != undefined) {
-                await updateData(tarefa)
+                updateData(tarefa)
                 alert("Tarefa atualizada!")
             }
             else {
-                await addData(tarefa)
+                addData(tarefa)
                 alert("Nova tarefa cadastrada!")
             }
             navigation.navigate('Home')
@@ -60,7 +60,7 @@ export default function NovaTarefa(props) {
     return (
         <View style={styles.container}>
             <View style={styles.cabecalho}>
-                <Text style={styles.titulo}>{task ? 'Editar' : 'Adicionar'} Tarefa</Text>
+                <Text style={styles.titulo}>{task ? 'Editar' ? 'Adicionar'} Tarefa</Text>
             </View>
             <ScrollView style={styles.body}>
                 <Text style={styles.texto}>Nome da Tarefa:</Text>
@@ -92,20 +92,18 @@ export default function NovaTarefa(props) {
                 />
 
                 <View style={styles.containerBotao}>
-                    <TouchableOpacity style={styles.botao} onPress={() => navigation.goBack()}>
+                    <TouchableOpacity style={styles.botao} onPress={navigation.goBack}>
                         <Text style={styles.botaoTexto}>Cancel</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.botao} onPress={() => {
-                        handleSave()
-                    }}>
+                    <TouchableOpacity style={styles.botao} onPress={handleSave()}>
                         <Text style={styles.botaoTexto}>OK</Text>
                     </TouchableOpacity>
                 </View>
 
             </ScrollView>
         </View>
-    )
+    }
 }
 
 

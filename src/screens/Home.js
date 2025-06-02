@@ -11,8 +11,8 @@ export default function Home() {
     const [ tasks, setTasks ] = useState(null)
     const [ isLoaded, setIsLoaded ] = useState(true)
 
-    const loadData = async () => {
-        const data = await getData();
+    const loadData = () => {
+        const data = getData();
         setTasks(data);
         setIsLoaded(!isLoaded)
     }
@@ -22,7 +22,7 @@ export default function Home() {
         if(isLoaded){
             loadData();
         }
-    }, [isLoaded]);
+    }, []);
 
     return (
         <View style={styles.container}>
@@ -32,10 +32,9 @@ export default function Home() {
             </View>
             <ScrollView style={styles.body}>
                 {
-                    tasks && tasks.map((item, index) => {
+                    tasks.map((item, index) => {
                         return (
                             <TarefaItem
-                                key={index}
                                 task={item}
                                 setIsLoaded={setIsLoaded}
                             />

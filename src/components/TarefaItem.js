@@ -22,7 +22,7 @@ export default function TarefaItem(props) {
         <TouchableOpacity 
             style={styles.container}
             onPress={() => {
-                navigation.navigate('NovaTarefa', props.task)
+                navigation.navigate('NovaTarefa')
             }}
         >
             <Text style={styles.titulo}>{props.task.nome}</Text>
@@ -31,7 +31,7 @@ export default function TarefaItem(props) {
             <View style={{ ...styles.status, backgroundColor: statusColor }}>
                 <Text style={styles.textoStatus}>{props.task.status}</Text>
             </View>
-            <TouchableOpacity style={styles.botaoExcluir} onPress={() => handleDelete()}>
+            <TouchableOpacity style={styles.botaoExcluir} onPress={handleDelete()}>
                 <MaterialCommunityIcons name="delete" size={32} color="#870d07" />
             </TouchableOpacity>
         </TouchableOpacity>
